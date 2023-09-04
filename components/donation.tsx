@@ -39,7 +39,7 @@ export default function Donation() {
       </Group>
       <Stack>
         {data?.map((e) =>
-          <Paper shadow="xs" p="md">
+          <Paper key={e.id} shadow="xs" p="md">
             <Group>
               <Text>{e.firstName}</Text>
               <Text>{e.lastName}</Text>
