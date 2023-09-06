@@ -1,18 +1,21 @@
 import { API_URL } from "../utils/api";
-import { type Donation } from "@/utils/types";
+import { donationsSchema, type Donation } from "@/utils/types";
 import { Paper, Text, Stack, Group, Title, Card } from "@mantine/core";
 import axios from "axios";
-import dayjs from "dayjs";
 import { useEffect, useState } from "react";
 
 export default function Donation() {
-
   const [data, setData] = useState<Donation[]>();
   const [total, setTotal] = useState<number>();
 
   const fetchData = async () => {
-    const res = await axios.get<Donation[]>(API_URL);
-    setData(res.data);
+    const res = await axios.get<Donation[]>(`${API_URL}/donation`);
+    const result = donationsSchema.safeParse(res.data);
+    if (!result.success) {
+      console.log({ error: result.error.issues });
+      return;
+    }
+    setData(result.data);
     let allAmount: number = 0;
     res.data.forEach(e => {
       allAmount += e.amount
